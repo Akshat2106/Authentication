@@ -1,16 +1,21 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+import { appContext } from '../../Store/Context';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+
+  let ctx=useContext(appContext);
+  const [isLogin, setIsLogIn] = useState(false);
+
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const [isLogin, setIsLogin] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const switchAuthModeHandler = () => {
-    setIsLogin((prevState) => !prevState);
+    setIsLogIn((prevState) => !prevState);
   };
 
   const submitHandler = (event) => {
@@ -40,8 +45,14 @@ const AuthForm = () => {
         setIsLoading(false);
         if (res.ok) {
          let responce=res.json();
-         responce.then((data)=>console.log("idTOken:",data.idToken))
+         responce.then((data)=>{
+          console.log("idTOken:",data.idToken);
+          ctx.token=data.idToken;
+          console.log(ctx);
+          ctx.setIsLoggedIn(true);
+        })
         } else {
+        console.log(res)
           return res.json().then((data) => {
             let errorMessage = 'Authentication failed!';
             // if (data && data.error && data.error.message) {
@@ -69,13 +80,16 @@ const AuthForm = () => {
       ).then((res) => {
         setIsLoading(false);
         if (res.ok) {
-          console.log("Sign up successfully")
+          let responce=res.json();
+         responce.then((data)=>{
+          console.log("idTOken:",data.idToken);
+          ctx.token=data.idToken;
+          console.log(ctx);
+          ctx.isLoggedin(true);
+        })
         } else {
           return res.json().then((data) => {
             let errorMessage = 'Authentication failed!';
-            // if (data && data.error && data.error.message) {
-            //   errorMessage = data.error.message;
-            // }
             alert(errorMessage);
           });
         }
@@ -108,7 +122,7 @@ const AuthForm = () => {
             className={classes.toggle}
             onClick={switchAuthModeHandler}
           >
-            {isLogin ? 'Create new account' : 'Login with existing account'}
+            {ctx.isLogin ? 'Create new account' : 'Login with existing account'}
           </button>
         </div>
       </form>
