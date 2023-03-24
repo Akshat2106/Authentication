@@ -11,7 +11,7 @@ const handleChangePassword=(e)=>{
   console.log({
     idToken: ctx.token,
     password: passwrd.current.value,
-    returnSecureToken: false,
+    returnSecureToken: true,
   })
 fetch(
   'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyByOrvUk-TKCvmY39IHjB_EQvxRkvKF3Wc',
@@ -20,14 +20,14 @@ fetch(
     body: JSON.stringify({
       idToken: ctx.token,
       password: passwrd.current.value,
-      returnSecureToken: false,
+      returnSecureToken: true,
     }),
     headers: {
       'Content-Type': 'application/json',
     },
   }
 ).then((res) => {
-
+  
 }).catch(e=>console.log(e));
 
 }

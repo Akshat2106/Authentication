@@ -10,6 +10,7 @@ const MainNavigation = () => {
 
   const handleLogout=(e)=>{
     e.preventDefault();
+    localStorage.removeItem("idToken")
     ctx.setToken(null);
    console.log(ctx);
     ctx.setIsLoggedIn(false);

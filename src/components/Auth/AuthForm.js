@@ -13,7 +13,7 @@ const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-
+ 
   const [isLoading, setIsLoading] = useState(false);
 
   const switchAuthModeHandler = () => {
@@ -52,6 +52,10 @@ const AuthForm = () => {
           console.log("idTOken:",data.idToken);
           ctx.setToken(data.idToken);
           localStorage.setItem("idToken",data.idToken);
+          setTimeout(() => {
+          localStorage.removeItem("idToken");
+          ctx.setToken(null);
+          }, 5*60*1000);
           ctx.setIsLoggedIn(true);
           history.push('/profile')
         })
