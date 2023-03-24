@@ -3,7 +3,8 @@ import React, { createContext, useState } from 'react'
 let appContext=createContext();
 
 const Context = (props) => {
-    const [isLoggedin, setIsLoggedIn] = useState(false);
+  let storedToken=localStorage.getItem("idToken");
+    const [isLoggedin, setIsLoggedIn] = useState(storedToken);
     const [token, setToken] = useState(null);
 
   return (

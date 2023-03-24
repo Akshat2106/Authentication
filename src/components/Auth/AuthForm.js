@@ -1,10 +1,12 @@
 import { useState, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { appContext } from '../../Store/Context';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
 
+  let history=useHistory();
   let ctx=useContext(appContext);
   const [isLogin, setIsLogIn] = useState(false);
 
@@ -42,22 +44,21 @@ const AuthForm = () => {
           },
         }
       ).then((res) => {
+        console.log(ctx);
         setIsLoading(false);
         if (res.ok) {
          let responce=res.json();
          responce.then((data)=>{
           console.log("idTOken:",data.idToken);
-          ctx.token=data.idToken;
-          console.log(ctx);
+          ctx.setToken(data.idToken);
+          localStorage.setItem("idToken",data.idToken);
           ctx.setIsLoggedIn(true);
+          history.push('/profile')
         })
         } else {
         console.log(res)
           return res.json().then((data) => {
             let errorMessage = 'Authentication failed!';
-            // if (data && data.error && data.error.message) {
-            //   errorMessage = data.error.message;
-            // }
             alert(errorMessage);
           });
         }
@@ -83,7 +84,7 @@ const AuthForm = () => {
           let responce=res.json();
          responce.then((data)=>{
           console.log("idTOken:",data.idToken);
-          ctx.token=data.idToken;
+          ctx.setToken(data.idToken);
           console.log(ctx);
           ctx.isLoggedin(true);
         })
@@ -122,7 +123,7 @@ const AuthForm = () => {
             className={classes.toggle}
             onClick={switchAuthModeHandler}
           >
-            {ctx.isLogin ? 'Create new account' : 'Login with existing account'}
+            {isLogin ? 'Create new account' : 'Login with existing account'}
           </button>
         </div>
       </form>
